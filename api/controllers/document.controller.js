@@ -28,8 +28,6 @@ exports.getDocuments = async (req, res) => {
 
 exports.addOneDocument = async (req, res) => {
   try {
-    const url = req.protocol + "://" + req.get("host"); // => "http://localhost:4000"
-    // ! the link for the post image is "http://localhost:4000/uploads/name"
     const { title, author, pages, price, ownerId } = req.body;
     const result = await cloudinary.uploader.upload(req.file.path);
     const document = new Document({
@@ -103,7 +101,6 @@ exports.updateOneDocument = async (req, res) => {
 
 exports.deleteOneDocument = async (req, res) => {
   try {
-    // console.log(req.params.id);
     const document = await Document.findById(req.params.id);
     if (!document) {
       return res.status(404).send("document not found");
