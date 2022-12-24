@@ -33,11 +33,26 @@ exports.getOneUserById = async (req, res) => {
 
 exports.updateOneUser = async (req, res) => {
   try {
-    console.log(req.body)
-    const user = await User.findOneAndUpdate({ _id: req.params.id }, req.body, {
-      new: true,
-      useFindAndModify: false,
-    });
+    console.log(req.body);
+    const { id, firstName, lastName, userName, password, contact, studyFeild } =
+      req.body;
+    const hashedPassword = await bcrypt.hash(password, 15);
+    const user = await User.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        id,
+        firstName,
+        lastName,
+        userName,
+        password: hashedPassword,
+        contact,
+        studyFeild,
+      },
+      {
+        new: true,
+        useFindAndModify: false,
+      }
+    );
     res.status(200).json({ message: "User updated", data: user });
   } catch (err) {
     res

@@ -65,7 +65,7 @@ exports.signin = async (req, res) => {
     const { email, password } = req.body;
     //*server form validation
     if (!(email && password)) {
-      return res.status(400).send("All inputs are required");
+      return res.status(400).send({ message: "All inputs are required" });
     }
 
     //* search for user in db
@@ -86,7 +86,9 @@ exports.signin = async (req, res) => {
   } catch (err) {
     res
       .status(500)
-      .send(err.message || "something went wrong while signing in ");
+      .send({
+        message: err.message || "something went wrong while signing in ",
+      });
   }
 };
 
