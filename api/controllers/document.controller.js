@@ -28,12 +28,12 @@ exports.getDocuments = async (req, res) => {
 
 exports.addOneDocument = async (req, res) => {
   try {
-    const { title, author, pages, price, ownerId } = req.body;
+    const { title, author, subject, price, ownerId } = req.body;
     const result = await cloudinary.uploader.upload(req.file.path);
     const document = new Document({
       title,
       author,
-      pages,
+      subject,
       price,
       image: result.secure_url,
       cloudinary_id: result.public_id,
@@ -54,7 +54,7 @@ exports.addOneDocument = async (req, res) => {
 exports.updateOneDocument = async (req, res) => {
   try {
     if (req.file) {
-      const { title, author, pages, price } = req.body;
+      const { title, author, subject, price } = req.body;
       let d = await Document.findOne({ _id: req.params.id });
       await cloudinary.uploader.destroy(d.cloudinary_id);
       const result = await cloudinary.uploader.upload(req.file.path);
@@ -64,7 +64,7 @@ exports.updateOneDocument = async (req, res) => {
         {
           title: title,
           author: author,
-          pages: pages,
+          subject: subject,
           price: price,
           image: result.secure_url,
           cloudinary_id: result.public_id,
@@ -75,7 +75,7 @@ exports.updateOneDocument = async (req, res) => {
         .status(200)
         .send({ message: "document updated with success", data: document });
     } else {
-      const { title, author, pages, price } = req.body;
+      const { title, author, subject, price } = req.body;
       let document = await Document.findOneAndUpdate(
         {
           _id: req.params.id,
@@ -83,7 +83,7 @@ exports.updateOneDocument = async (req, res) => {
         {
           title,
           author,
-          pages,
+          subject,
           price,
         },
         { new: true, useFindAndModify: false }

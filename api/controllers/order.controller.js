@@ -33,7 +33,6 @@ exports.getOrders = async (req, res) => {
 exports.getSellerOrders = async (req, res) => {
   try {
     const userOrders = await Order.find({ sellerId: req.user.user_id });
-    console.log(userOrders)
     if (!userOrders) {
       return res.status(404).send({ message: "no orders" });
     }

@@ -30,13 +30,13 @@ exports.getBooks = async (req, res) => {
 exports.addOneBook = async (req, res) => {
   try {
  
-    const { title, author, pages, price, ownerId } = req.body;
+    const { title, author,subject, price, ownerId } = req.body;
     
     const result = await cloudinary.uploader.upload(req.file.path);
     const book = new Book({
       title,
       author,
-      pages,
+      subject,
       price,
       image: result.secure_url,
       cloudinary_id: result.public_id,
@@ -57,7 +57,7 @@ exports.addOneBook = async (req, res) => {
 exports.updateOneBook = async (req, res) => {
   try {
     if (req.file) {
-      const { title, author, pages, price } = req.body;
+      const { title, author, subject, price } = req.body;
       let b = await Book.findOne({ _id: req.params.id });
       await cloudinary.uploader.destroy(b.cloudinary_id);
       const result = await cloudinary.uploader.upload(req.file.path);
@@ -67,7 +67,7 @@ exports.updateOneBook = async (req, res) => {
         {
           title: title,
           author: author,
-          pages: pages,
+          subject: subject,
           price: price,
           image: result.secure_url,
           cloudinary_id: result.public_id,
@@ -78,7 +78,7 @@ exports.updateOneBook = async (req, res) => {
         .status(200)
         .send({ message: "book updated with success", data: book });
     } else {
-      const { title, author, pages, price } = req.body;
+      const { title, author, subject, price } = req.body;
       let book = await Book.findOneAndUpdate(
         {
           _id: req.params.id,
@@ -86,7 +86,7 @@ exports.updateOneBook = async (req, res) => {
         {
           title,
           author,
-          pages,
+          subject,
           price,
         },
         { new: true, useFindAndModify: false }
