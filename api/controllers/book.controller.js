@@ -29,12 +29,9 @@ exports.getBooks = async (req, res) => {
 
 exports.addOneBook = async (req, res) => {
   try {
-    const url = req.protocol + "://" + req.get("host"); // => "http://localhost:4000"
-    // ! the link for the post image is "http://localhost:4000/uploads/name"
+ 
     const { title, author, pages, price, ownerId } = req.body;
-    // console.log(ownerId);
-    // console.log(req.body);
-    // saving image to cloudinary
+    
     const result = await cloudinary.uploader.upload(req.file.path);
     const book = new Book({
       title,
@@ -105,7 +102,7 @@ exports.updateOneBook = async (req, res) => {
 
 exports.deleteOneBook = async (req, res) => {
   try {
-    // console.log(req.params.id);
+ 
     const book = await Book.findById(req.params.id);
     if (!book) {
       return res.status(404).send("book not found");
